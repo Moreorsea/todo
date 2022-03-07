@@ -5,7 +5,7 @@ import './App.css';
 import TodoItem from './TodoItem/TodoItem';
 import AddTodo from './Form/Form';
 import Pagination from './Pagination/Pagination';
-import Switch from '@mui/material/Switch';
+import Switch from './Switch/Switch';
 
 class App extends Component {
   constructor() {
@@ -19,6 +19,7 @@ class App extends Component {
       form: {
         text: ''
       },
+      isDarkTheme: false,
       status: 'Идет загрузка...'
     }
 
@@ -31,6 +32,7 @@ class App extends Component {
     this.getCurrentPageNumber = this.getCurrentPageNumber.bind(this)
     this.isFailed = this.isFailed.bind(this)
     this.isSuccess = this.isSuccess.bind(this)
+    this.choiceTheme = this.choiceTheme.bind(this)
   }
 
   isFailed() {
@@ -87,6 +89,7 @@ class App extends Component {
     this.setState(prev => {
       let dataList = prev.data.map(item => {
         if(item.id === id) {
+
           item.completed = !item.completed
         }
         return item
@@ -161,10 +164,16 @@ class App extends Component {
     e.target.reset()
   }
 
+  choiceTheme() {
+    this.setState({isDarkTheme: !this.state.isDarkTheme})
+  }
+
   render() {
     return (
-      <div className="center">
-        <Switch />
+      <div className={'center ' + (this.state.isDarkTheme ? 'dark' : ' ')}>
+        <div className="cetner-wrapper">
+        <Switch isDarkTheme={this.state.isDarkTheme} choiceTheme={this.choiceTheme} />
+
         <AddTodo submitForm={this.submitForm} changeInput={this.changeInput} />
         {
           this.state.loading ? <p>{this.state.status}</p> : null
@@ -182,6 +191,7 @@ class App extends Component {
             getCurrentPageNumber={this.getCurrentPageNumber}
             pageLimit={this.state.pageLimit}
         />
+        </div>
       </div>
     )
   }
