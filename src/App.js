@@ -19,7 +19,7 @@ class App extends Component {
       form: {
         text: ''
       },
-      isDarkTheme: false,
+      isDarkTheme: localStorage.getItem('theme'),
       status: 'Идет загрузка...'
     }
 
@@ -86,18 +86,18 @@ class App extends Component {
   }
 
   toggleCheckbox(id) {
-    this.setState(prev => {
-      let dataList = prev.data.map(item => {
-        if(item.id === id) {
+    let curEl = this.state.data.filter(item => item.id === id)
+    curEl[0]['completed'] = !curEl[0]['completed']
 
-          item.completed = !item.completed
-        }
-        return item
-      })
-
-      return {
-        data: dataList
-      }
+    return axios({
+      method: "put",
+      data: curEl[0],
+      url: `https://dselyanina.pythonanywhere.com/api/todos/${id}/`,
+    }).then(() => {
+      this.updateTodo()
+      this.isSuccess()
+    }).catch(() => {
+      this.isFailed()
     })
   }
 
@@ -165,7 +165,8 @@ class App extends Component {
   }
 
   choiceTheme() {
-    this.setState({isDarkTheme: !this.state.isDarkTheme})
+    this.setState({isDarkTheme: !this.state.isDarkTheme});
+    localStorage.setItem('theme', this.state.isDarkTheme);
   }
 
   render() {

@@ -15,7 +15,7 @@ function Switch(props) {
 
 Switch.propTypes = {
   choiceTheme: PropTypes.func.isRequired,
-  isDarkTheme: PropTypes.bool.isRequired
+  isDarkTheme: PropTypes.string.isRequired
 }
 
 
